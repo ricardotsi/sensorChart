@@ -32,6 +32,12 @@ def index(request):
     temp = open("/sys/class/thermal/thermal_zone0/temp", "r")
     tcpu = temp.readline()
 
+    #Ventilação
+    vent=0
+    with open("/home/pi/sensorChart/vent","r") as tvent:
+        vent = int(tvent.readline())
+        tvent.close()
+
     context = {
         'datahj': json.dumps(datahj),
         'temphj': json.dumps(temphj),
@@ -43,6 +49,7 @@ def index(request):
         "tempult": json.dumps(tempult),
         "umidult": json.dumps(umidult),
         "tcpu": json.dumps(tcpu),
+        "vent": json.dumps(vent),
     }
     return render(request, "sensor/index.html", context)
 
@@ -56,13 +63,23 @@ def ventilacao(request):
         if estado == "true":
             GPIO.output(23, GPIO.HIGH)
             GPIO.output(23, GPIO.LOW)
+            vent=0
+            with open("/home/pi/sensorChart/vent","w") as tvent:
+                tvent.write("1")
+                tvent.close()
             resultado = "Ventilação ligada"
         else:
             GPIO.output(23, GPIO.HIGH)
             GPIO.cleanup()
+            with open("/home/pi/sensorChart/vent","w") as tvent:
+                tvent.write("0")
+                tvent.close()
             resultado="Ventilação desligada"
     except:
         GPIO.cleanup()
+        with open("/home/pi/sensorChart/vent","w") as tvent:
+                tvent.write("0")
+                tvent.close()
         resultado = "Ocorreu um erro na execução"
     data = {
         "resultado": resultado 

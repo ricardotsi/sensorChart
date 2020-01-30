@@ -7,6 +7,13 @@ $(document).ready(function () {
     // Desenha os graficos
     drawCharts();
 
+    //Verifica posição da ventilação
+    if(vent == 0){
+        $("#checkboxfan").bootstrapToggle('off');
+    }else{
+        $("#checkboxfan").bootstrapToggle('on');
+    }
+
     // Trata a checkbox da luz
     $('#checkboxfan').change(function (event) {
         $('#checkboxfan').bootstrapToggle('disable');
