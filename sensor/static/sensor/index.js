@@ -1,23 +1,3 @@
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
 $(document).ready(function () {
     // Adiciona a data atual no título
     var d = new Date();
@@ -28,28 +8,45 @@ $(document).ready(function () {
     drawCharts();
 
     // Trata a checkbox da luz
-    $('#checkboxlight').change(function (event) {
-        $('#checkboxlight').bootstrapToggle('disable');
-        // var csrftoken = getCookie('csrftoken');
-        // $.ajaxSetup({
-        //     beforeSend: function(xhr, settings) {
-        //         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-        //             xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        //         }
-        //     }
-        // });
-        // $.ajax({
-        //     type: "POST",
-        //     url: "/luz/",
-        //     data: {
-        //         // 'video': $('#test').val() // from form
-        //     },
-        //     success: function () {
-        //         console.log("deu")
-        //         $('#checkboxlight').bootstrapToggle('enable');
-        //     }
-        // });
-        
+    $('#checkboxfan').change(function (event) {
+        $('#checkboxfan').bootstrapToggle('disable');
+        var estado = $('#checkboxfan')[0].checked;
+        $.ajax({
+            url: 'ajax/ventilacao',
+            data: {
+                'estado': estado
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#checkboxfan').bootstrapToggle('enable');
+                if (data.resultado.includes("Ventilação")){
+                    $(".alert").addClass("alert-success");
+                }else{
+                    $(".alert").addClass("alert-danger");
+                }
+                $(".alert").append("<strong>" + data.resultado + "</strong>")
+                $(".alert").fadeIn().delay(2000).fadeOut();
+                setTimeout(
+                    function () {
+                        if (data.resultado.includes("Ventilação")){
+                            $(".alert").removeClass("alert-success");
+                        }else{
+                            $(".alert").removeClass("alert-danger");
+                        }
+                        $(".alert").empty();
+                    }, 3000);
+            },
+            error: function (data) {
+                $(".alert").addClass("alert-danger");
+                $(".alert").append("<strong>Tente novamente</strong>")
+                $(".alert").fadeIn().delay(2000).fadeOut();
+                setTimeout(
+                    function () {
+                        $(".alert").removeClass("alert-danger");
+                        $(".alert").empty();
+                    }, 3000);
+            }
+        });
     });
 
     // Atualiza página a cada 15 minutos

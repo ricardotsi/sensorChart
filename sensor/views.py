@@ -4,6 +4,8 @@ import json
 import datetime
 from django.contrib.auth.decorators import login_required
 import io
+from django.http import JsonResponse
+import RPi.GPIO as GPIO
 
 @login_required
 def index(request):
@@ -44,10 +46,25 @@ def index(request):
     }
     return render(request, "sensor/index.html", context)
 
-# @login_required
-# def light_toggle(request):
-#     if request.is_ajax():
-#         message = "Yes, AJAX!"
-#     else:
-#         message = "Not Ajax"
-#     return HttpResponse(message)
+@login_required
+def ventilacao(request):
+    estado = request.GET.get('estado', None)
+    try:
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(23, GPIO.OUT)
+        resultado=""
+        if estado == "true":
+            GPIO.output(23, GPIO.HIGH)
+            GPIO.output(23, GPIO.LOW)
+            resultado = "Ventilação ligada"
+        else:
+            GPIO.output(23, GPIO.HIGH)
+            GPIO.cleanup()
+            resultado="Ventilação desligada"
+    except:
+        GPIO.cleanup()
+        resultado = "Ocorreu um erro na execução"
+    data = {
+        "resultado": resultado 
+    }
+    return JsonResponse(data)

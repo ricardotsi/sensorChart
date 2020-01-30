@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    #url(r'^luz/', views.light_toggle, name='light_toggle'),
+    url(r'^ajax/ventilacao/$', views.ventilacao, name='ventilacao'),
 ]
