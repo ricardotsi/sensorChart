@@ -43,3 +43,11 @@ def index(request):
         "tcpu": json.dumps(tcpu),
     }
     return render(request, "sensor/index.html", context)
+
+# @login_required
+# def light_toggle(request):
+#     if request.is_ajax():
+#         message = "Yes, AJAX!"
+#     else:
+#         message = "Not Ajax"
+#     return HttpResponse(message)
