@@ -7,6 +7,13 @@ $(document).ready(function () {
     // Desenha os graficos
     drawCharts();
 
+    //Verifica posição da ventilação
+    if(vent == 0){
+        $("#checkboxfan").bootstrapToggle('off');
+    }else{
+        $("#checkboxfan").bootstrapToggle('on');
+    }
+
     // Trata a checkbox da luz
     $('#checkboxfan').change(function (event) {
         $('#checkboxfan').bootstrapToggle('disable');
@@ -18,7 +25,6 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
-                $('#checkboxfan').bootstrapToggle('enable');
                 if (data.resultado.includes("Ventilação")){
                     $(".alert").addClass("alert-success");
                 }else{
@@ -34,6 +40,7 @@ $(document).ready(function () {
                             $(".alert").removeClass("alert-danger");
                         }
                         $(".alert").empty();
+                        $('#checkboxfan').bootstrapToggle('enable');
                     }, 3000);
             },
             error: function (data) {
