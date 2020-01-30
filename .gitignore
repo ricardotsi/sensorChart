@@ -3,4 +3,6 @@ sensor/__pycache__/
 sensor/migrations/
 sensorChart/__init__.py
 sensorChart/__pycache__/
-static/
+static/admin/
+static/sensor/style.css
+static/sensor/index.js
