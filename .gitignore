@@ -1,0 +1,6 @@
+sensor/__init__.py
+sensor/__pycache__/
+sensor/migrations/
+sensorChart/__init__.py
+sensorChart/__pycache__/
+static/

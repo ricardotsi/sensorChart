@@ -1,0 +1,41 @@
+{% extends 'sensor/base.html' %}
+{% block content %}
+<div class="container shadow-sm rounded ctop text-center mt-5">
+    <h1>Login</h1>
+</div>
+<div class="container cbottom text-center shadow rounded">
+    {% if form.errors %}
+    <div class="alert alert-dismissible alert-danger">
+        <strong>Seu usuário ou senha está incorreto. Tente novamente.</strong>
+    </div>
+    {% endif %}
+    <form class="mt-4 mb-3" lpformnum="1" method="post">
+        {% csrf_token %}
+        <div class="form-row align-items-center">
+            <div class="col-sm">
+                <label class="sr-only" for="inlineFormInputGroup">Username</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Usuário:</div>
+                    </div>
+                    <input id="id_username" maxlength="254" name="username" type="text" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="form-row align-items-center">
+            <div class="col-sm">
+                <label class="sr-only" for="inlineFormInputGroup">Senha</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Senha:</div>
+                    </div>
+                    <input id="id_password" name="password" type="password" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-3 mb-3">
+            <button type="submit" class="btn btn-success text-center ">Entrar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
