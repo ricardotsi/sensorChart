@@ -14,9 +14,10 @@ $(document).ready(function () {
         $("#checkboxfan").bootstrapToggle('on');
     }
 
-    // Trata a checkbox da luz
+    // Trata a checkbox da ventilação
     $('#checkboxfan').change(function (event) {
         $('#checkboxfan').bootstrapToggle('disable');
+        $('#checkboxlight').bootstrapToggle('disable');
         var estado = $('#checkboxfan')[0].checked;
         $.ajax({
             url: 'ajax/ventilacao',
@@ -41,11 +42,63 @@ $(document).ready(function () {
                         }
                         $(".alert").empty();
                         $('#checkboxfan').bootstrapToggle('enable');
+                        $('#checkboxlight').bootstrapToggle('enable');
                     }, 3000);
             },
             error: function (data) {
                 $(".alert").addClass("alert-danger");
-                $(".alert").append("<strong>Tente novamente</strong>")
+                $(".alert").append("<strong>Ocorreu um erro na requisição</strong>")
+                $(".alert").fadeIn().delay(2000).fadeOut();
+                setTimeout(
+                    function () {
+                        $(".alert").removeClass("alert-danger");
+                        $(".alert").empty();
+                    }, 3000);
+            }
+        });
+    });
+
+    //Verifica posição da ventilação
+    if(luz == 0){
+        $("#checkboxlight").bootstrapToggle('off');
+    }else{
+        $("#checkboxlight").bootstrapToggle('on');
+    }
+
+    // Trata a checkbox da luz
+    $('#checkboxlight').change(function (event) {
+        $('#checkboxlight').bootstrapToggle('disable');
+        $('#checkboxfan').bootstrapToggle('disable');
+        var estado = $('#checkboxlight')[0].checked;
+        $.ajax({
+            url: 'ajax/luz',
+            data: {
+                'estado': estado
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.resultado.includes("Luz")){
+                    $(".alert").addClass("alert-success");
+                }else{
+                    $(".alert").addClass("alert-danger");
+                }
+                $(".alert").append("<strong>" + data.resultado + "</strong>")
+                $(".alert").fadeIn().delay(2000).fadeOut();
+                setTimeout(
+                    function () {
+                        if (data.resultado.includes("Luz")){
+                            $(".alert").removeClass("alert-success");
+                        }else{
+                            $(".alert").removeClass("alert-danger");
+                        }
+                        $(".alert").empty();
+                        $('#checkboxlight').bootstrapToggle('enable');
+                        $('#checkboxfan').bootstrapToggle('enable');
+                    }, 3000);
+            },
+            error: function (data) {
+                $(".alert").addClass("alert-danger");
+                $(".alert").append("<strong>Ocorreu um erro na requisição</strong>")
                 $(".alert").fadeIn().delay(2000).fadeOut();
                 setTimeout(
                     function () {

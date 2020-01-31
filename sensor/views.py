@@ -38,6 +38,12 @@ def index(request):
         vent = int(tvent.readline())
         tvent.close()
 
+    #Luz
+    luz=0
+    with open("/home/pi/sensorChart/luz","r") as tluz:
+        luz = int(tluz.readline())
+        tluz.close()
+
     context = {
         'datahj': json.dumps(datahj),
         'temphj': json.dumps(temphj),
@@ -50,6 +56,7 @@ def index(request):
         "umidult": json.dumps(umidult),
         "tcpu": json.dumps(tcpu),
         "vent": json.dumps(vent),
+        "luz": json.dumps(luz),
     }
     return render(request, "sensor/index.html", context)
 
@@ -63,23 +70,54 @@ def ventilacao(request):
         if estado == "true":
             GPIO.output(23, GPIO.HIGH)
             GPIO.output(23, GPIO.LOW)
-            vent=0
             with open("/home/pi/sensorChart/vent","w") as tvent:
                 tvent.write("1")
                 tvent.close()
             resultado = "Ventilação ligada"
         else:
             GPIO.output(23, GPIO.HIGH)
-            GPIO.cleanup()
+            #GPIO.cleanup()
             with open("/home/pi/sensorChart/vent","w") as tvent:
                 tvent.write("0")
                 tvent.close()
             resultado="Ventilação desligada"
     except:
-        GPIO.cleanup()
+        #GPIO.cleanup()
         with open("/home/pi/sensorChart/vent","w") as tvent:
                 tvent.write("0")
                 tvent.close()
+        resultado = "Ocorreu um erro na execução"
+    data = {
+        "resultado": resultado 
+    }
+    return JsonResponse(data)
+
+@login_required
+def luz(request):
+    estado = request.GET.get('estado', None)
+    try:
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(18, GPIO.OUT)
+        resultado=""
+        if estado == "true":
+            GPIO.output(18, GPIO.HIGH)
+            GPIO.output(18, GPIO.LOW)
+            with open("/home/pi/sensorChart/luz","w") as tluz:
+                tluz.write("1")
+                tluz.close()
+            resultado = "Luz ligada"
+        else:
+            GPIO.output(18, GPIO.HIGH)
+            #GPIO.cleanup()
+            with open("/home/pi/sensorChart/luz","w") as tluz:
+                tluz.write("0")
+                tluz.close()
+            resultado="Luz desligada"
+    except:
+        #GPIO.cleanup()
+        with open("/home/pi/sensorChart/luz","w") as tluz:
+                tluz.write("0")
+                tluz.close()
         resultado = "Ocorreu um erro na execução"
     data = {
         "resultado": resultado 
