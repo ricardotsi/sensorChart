@@ -1,7 +1,7 @@
 $(document).ready(function () {
     // Adiciona a data atual no título
     var d = new Date();
-    var strDate = (d.getDate() + "/" + d.getMonth() + 1) + "/" + d.getFullYear();
+    var strDate = (d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear());
     $('.titulo').text(strDate);
 
     // Desenha os graficos

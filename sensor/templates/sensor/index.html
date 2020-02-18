@@ -6,13 +6,13 @@
 </div>
 <div class="container cbottom shadow rounded">
     <div class="row mt-3 mb-3">
-        <div class="col-6 dados">
+        <div class="col-sm dados">
             <h3>Última leitura: {{datault|slice:"1:-1"}}H</h3>
             <h3>Temperatura: {{tempult}}ºC</h3>
             <h3>Umidade: {{umidult}}%</h3>
             <h3>CPU: {{tcpu|slice:"1:-6"}}.{{tcpu|slice:"-6:-4"}}ºC</h3>
         </div>
-        <div class="col-6">
+        <div class="col-sm">
             <div class="checkbox light">
                 <label for="checkboxlight">
                     <h3>Luz: </h3>
@@ -27,6 +27,9 @@
                 <input type="checkbox" id="checkboxfan" class="pull-right" data-toggle="toggle" data-style="ios"
                     data-on="Ligada" data-off="Desligada" data-onstyle="success" data-offstyle="danger" >
             </div>
+        </div>
+        <div class="col-sm">
+            <img src="{% static 'sensor/image.png' %}" width="480" height="320">
         </div>
     </div>
     <div class="row">
