@@ -1,9 +1,9 @@
 import RPi.GPIO as GPIO
 import io
 
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(18, GPIO.OUT)
 try:
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(18, GPIO.OUT)
     GPIO.output(18, GPIO.HIGH)
     GPIO.output(18, GPIO.LOW)
     with open("/home/pi/sensorChart/luz","w") as tluz:
